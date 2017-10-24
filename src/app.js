@@ -5,6 +5,8 @@ import template from './app.html';
 import sass from './app.sass';
 import filter from 'lodash.filter';
 import sortBy from 'lodash.sortby';
+import clone from 'lodash.clone';
+import productRow from './product-row.html';
 
 // Caching references to global data.
 const users = window.users;
@@ -18,6 +20,9 @@ const maximumCharacters = 140;
 const app = Ractive({
     target: '#BrandonsFTProject',
     template,
+    partials: {
+        productRow,
+    },
     data: function () {
         return {
             itemsPerPage: 10,
@@ -122,7 +127,8 @@ const app = Ractive({
                   "inventory": 4,
                   "thumbnail": "http://frontend-trial-project.weebly.com/uploads/1/0/5/4/105462933/11708126.png"
                 }
-              ],
+            ],
+            editing: {},
         }
     },
     computed: {
@@ -151,7 +157,7 @@ const app = Ractive({
                 if (sortDesc)
                     products.reverse();
             }
-            
+
             return products;
         },
         pages: function () {
@@ -189,6 +195,14 @@ const app = Ractive({
             ? !this.get('sortDesc')
             : false;
         this.set({sortColumn, sortDesc});
+    },
+
+    editProduct: function (product) {
+        this.set(`editing.${product.id}`, clone(product));
+    },
+    saveEditedProduct: function (product) {
+        window.console.info('Yeah, go ahead and save those changes.');
+        this.set(`editing.${product.id}`, null);
     },
 });
 

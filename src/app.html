@@ -37,7 +37,7 @@
                                     <span class="custom-control-indicator"></span>
                                 </label>
                             </th>
-                            <th scope="col">
+                            <th scope="col" colspan="2">
                                 Name
                                 <i class="material-icons {{sortColumn !== 'name' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('name')>arrow_drop_down</i>
                             </th>
@@ -57,21 +57,7 @@
                     </thead>
                     <tbody class="text-muted">
                         {{#each visibleProducts}}
-                        <tr>
-                            <th scope="row">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                </label>
-                            </th>
-                            <td>
-                                <img src="{{.thumbnail}}" alt="preview" class="rounded">
-                                <span class="d-inline-block pl-2">{{.name}}</span>
-                            </td>
-                            <td>{{.type}}</td>
-                            <td>$ {{.price}}</td>
-                            <td>{{.inventory}}</td>
-                        </tr>
+                        {{>productRow}}
                         {{/each}}
                     </tbody>
                 </table>
