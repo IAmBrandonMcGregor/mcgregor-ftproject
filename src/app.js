@@ -6,6 +6,7 @@ import sass from './app.sass';
 import filter from 'lodash.filter';
 import sortBy from 'lodash.sortby';
 import clone from 'lodash.clone';
+import isEmpty from 'lodash.isempty';
 import productRow from './product-row.html';
 
 // Caching references to global data.
@@ -30,6 +31,7 @@ const app = Ractive({
             searchText: '',
             sortColumn: 'name',
             sortDesc: false,
+            editingAll: false,
             products: [
                 {
                   "id": 1,
@@ -183,7 +185,18 @@ const app = Ractive({
         },
     },
 
-    oninit: function () { },
+    oninit: function () {
+        this.observe('editingAll', function (editingAll) {
+            const editing = {};
+            if (editingAll) {
+                this.get('products').forEach(product => editing[product.id] = clone(product));
+            }
+            else if (!editingAll && !isEmpty(this.get('editing'))) {
+                console.log('TODO: Save Editing Changes!');
+            }
+            this.set({editing});
+        });
+    },
 
     // Custom component-level functions.
     noop: function (message = 'IDK what though.') {
