@@ -18,7 +18,7 @@ const app = Ractive({
     template,
     data: function () {
         return {
-            testWords: `Awesome! Really really awesome!`,
+            itemsPerPage: 10,
             products: [
                 {
                     name: 'Snapback Hat',
@@ -74,8 +74,93 @@ const app = Ractive({
                     price: 15.67,
                     inventory: 200,
                 },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                },
+                {
+                    name: 'Snapback Hat',
+                    type: 'Physical',
+                    price: 15.67,
+                    inventory: 200,
+                }
             ],
         }
+    },
+    computed: {
+        visibleProducts: function () {
+            const itemsPerPage = this.get('itemsPerPage');
+            const products = this.get('products');
+            return products.slice(0, itemsPerPage);
+        },
     },
 
     // Custom component-level functions.

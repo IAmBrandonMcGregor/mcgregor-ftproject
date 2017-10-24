@@ -56,7 +56,7 @@
                         </tr>
                     </thead>
                     <tbody class="text-muted">
-                        {{#each products}}
+                        {{#each visibleProducts}}
                         <tr>
                             <th scope="row">
                                 <label class="custom-control custom-checkbox">
@@ -81,10 +81,10 @@
         <div class="row | table-controls">
             <div class="col-6">
                 <span class="d-inline-lock mr-3 text-muted">Items per page: </span>
-                <select class="custom-select custom-select-sm">
+                <select class="custom-select custom-select-sm" value={{itemsPerPage}}>
+                    <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
+                    <option value="15">15</option>
                 </select>
             </div>
             <div class="col-6 text-right">
