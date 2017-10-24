@@ -65,11 +65,11 @@
                                 </label>
                             </th>
                             <td>
-                                <img src="//placehold.it/30x30" alt="preview" class="rounded">
+                                <img src="{{.thumbnail}}" alt="preview" class="rounded">
                                 <span class="d-inline-block pl-2">{{.name}}</span>
                             </td>
                             <td>{{.type}}</td>
-                            <td>{{.price}}</td>
+                            <td>$ {{.price}}</td>
                             <td>{{.inventory}}</td>
                         </tr>
                         {{/each}}
@@ -88,7 +88,7 @@
                 </select>
             </div>
             <div class="col-6 text-right">
-                <button class="btn btn-sm btn-outline-secondary pb-0" disabled>
+                <button class="btn btn-sm btn-outline-secondary pb-0" {{pageIdx === 0 ? 'disabled' : ''}} on-click=@this.subtract('pageIdx')>
                     <i class="material-icons">chevron_left</i>
                 </button>
                 <select class="custom-select custom-select-sm" value={{pageIdx}} {{pages.length <= 1 ? 'disabled' : ''}}>
@@ -96,7 +96,7 @@
                     <option value={{@index}}>{{.}}</option>
                     {{/each}}
                 </select>
-                <button class="btn btn-sm btn-outline-secondary pb-0">
+                <button class="btn btn-sm btn-outline-secondary pb-0" {{(pages.length <= 1 || pageIdx === pages.length-1) ? 'disabled' : ''}} on-click=@this.add('pageIdx')>
                     <i class="material-icons">chevron_right</i>
                 </button>
             </div>
