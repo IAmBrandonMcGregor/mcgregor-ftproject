@@ -3,6 +3,7 @@
 import Ractive from 'ractive';
 import template from './app.html';
 import sass from './app.sass';
+import filter from 'lodash.filter';
 
 // Caching references to global data.
 const users = window.users;
@@ -19,6 +20,7 @@ const app = Ractive({
     data: function () {
         return {
             itemsPerPage: 10,
+            searchText: '',
             products: [
                 {
                     name: 'Snapback Hat',
@@ -158,7 +160,18 @@ const app = Ractive({
     computed: {
         visibleProducts: function () {
             const itemsPerPage = this.get('itemsPerPage');
-            const products = this.get('products');
+            const searchText = this.get('searchText').toLowerCase();
+            let products = this.get('products');
+
+            if (searchText) {
+                let name, price;
+                products = filter(products, product => {
+                    name = product.name.toLowerCase();
+                    price = product.price.toString();
+                    return name.includes(searchText) || price.includes(searchText);
+                });
+            }
+
             return products.slice(0, itemsPerPage);
         },
     },

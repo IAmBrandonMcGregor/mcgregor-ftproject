@@ -16,6 +16,7 @@
     "clean-webpack-plugin": "0.1.17",
     "css-loader": "0.28.7",
     "extract-text-webpack-plugin": "3.0.1",
+    "lodash.filter": "4.6.0",
     "node-sass": "4.5.3",
     "ractive": "0.9.6",
     "ractive-loader": "0.5.6",
