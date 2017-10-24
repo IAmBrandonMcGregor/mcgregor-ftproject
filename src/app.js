@@ -21,6 +21,11 @@ const app = Ractive({
             testWords: `Awesome! Really really awesome!`
         }
     },
+
+    // Custom component-level functions.
+    noop: function (message = 'IDK what though.') {
+        window.console.log(`You've clicked something! ${message}`);
+    },
 });
 
 // Export the instance.

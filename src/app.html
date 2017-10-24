@@ -5,19 +5,21 @@
         <div class="row | title-with-buttons">
             <h2 class="col-12 col-sm-4 col-md-3">Products</h2>
             <div class="col button-wrapper text-right">
-                <button class="btn btn-outline-secondary">Export</button>
-                <button class="btn btn-outline-secondary">Import</button>
-                <button class="btn btn-primary">Add Product</button>
+                <button class="btn btn-outline-secondary" on-click=@this.noop('Do some exporting!')>Export</button>
+                <button class="btn btn-outline-secondary" on-click=@this.noop('Do some importing!')>Import</button>
+                <button class="btn btn-primary" on-click=@this.noop('Add that product!')>Add Product</button>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col col-sm-6 col-md-4 col-xl-3">
                 <form>
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1">@</span>
-                            <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+                            <label class="input-group-addon" id="basic-addon1" for="PVLSearchInput">
+                                <i class="material-icons">search</i>
+                            </label>
+                            <input id="PVLSearchInput" type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
                         </div>
                     </div>
                 </form>
