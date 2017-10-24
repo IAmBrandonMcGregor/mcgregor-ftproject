@@ -28,7 +28,7 @@
 
         <div class="row mt-1 | product-list">
             <div class="col">
-                <table class="table">
+                <table class="table {{sortDesc ? 'sort-desc' : ''}}">
                     <thead>
                         <tr>
                             <th scope="col">
@@ -39,19 +39,19 @@
                             </th>
                             <th scope="col">
                                 Name
-                                <i class="material-icons text-muted" on-click=@this.sortBy('name')>arrow_drop_down</i>
+                                <i class="material-icons {{sortColumn !== 'name' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('name')>arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Type
-                                <i class="material-icons text-muted" on-click=@this.sortBy('type')>arrow_drop_down</i>
+                                <i class="material-icons {{sortColumn !== 'type' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('type')>arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Price
-                                <i class="material-icons text-muted" on-click=@this.sortBy('price')>arrow_drop_down</i>
+                                <i class="material-icons {{sortColumn !== 'price' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('price')>arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Inventory
-                                <i class="material-icons text-muted" on-click=@this.sortBy('inventory')>arrow_drop_down</i>
+                                <i class="material-icons {{sortColumn !== 'inventory' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('inventory')>arrow_drop_down</i>
                             </th>
                         </tr>
                     </thead>
@@ -91,10 +91,10 @@
                 <button class="btn btn-sm btn-outline-secondary pb-0" disabled>
                     <i class="material-icons">chevron_left</i>
                 </button>
-                <select class="custom-select custom-select-sm">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                <select class="custom-select custom-select-sm" value={{pageIdx}} {{pages.length <= 1 ? 'disabled' : ''}}>
+                    {{#each pages}}
+                    <option value={{@index}}>{{.}}</option>
+                    {{/each}}
                 </select>
                 <button class="btn btn-sm btn-outline-secondary pb-0">
                     <i class="material-icons">chevron_right</i>

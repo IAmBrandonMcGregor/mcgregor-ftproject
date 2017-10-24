@@ -21,6 +21,7 @@ const app = Ractive({
     data: function () {
         return {
             itemsPerPage: 10,
+            pageIdx: 0,
             searchText: '',
             sortColumn: 'name',
             sortDesc: false,
@@ -125,8 +126,9 @@ const app = Ractive({
         }
     },
     computed: {
-        visibleProducts: function () {
-            const itemsPerPage = this.get('itemsPerPage');
+        sortedAndFilteredProducts: function () {
+
+            // Sort and filter our products based on UI selections.
             const searchText = this.get('searchText').toLowerCase();
             const sortColumn = this.get('sortColumn');
             const sortDesc = this.get('sortDesc');
@@ -149,13 +151,33 @@ const app = Ractive({
                 if (sortDesc)
                     products.reverse();
             }
+            
+            return products;
+        },
+        pages: function () {
 
-            // TODO: Improve pagination handling here.
+            // Populate an array of integers. This is used to populate the page selection dropdown.
+            const sortedAndFilteredProducts = this.get('sortedAndFilteredProducts');
+            const itemsPerPage = parseInt(this.get('itemsPerPage'));
+            const numberOfPages = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
+            let pages = [];
+            for (let i=0; i<numberOfPages; i++) {
+                pages[i] = i+1;
+            }
+            return pages;
+        },
+        visibleProducts: function () {
 
-            // Grab only the current page of 
-            return products.slice(0, itemsPerPage);
+            // Based on the selected page, page length, and filter... grab the currently displayed products.
+            const pageIdx = this.get('pageIdx');
+            const itemsPerPage = this.get('itemsPerPage');
+            const products = this.get('sortedAndFilteredProducts');
+            const startIdx = pageIdx * itemsPerPage;
+            return products.slice(startIdx, startIdx + itemsPerPage);
         },
     },
+
+    oninit: function () { },
 
     // Custom component-level functions.
     noop: function (message = 'IDK what though.') {
@@ -169,6 +191,8 @@ const app = Ractive({
         this.set({sortColumn, sortDesc});
     },
 });
+
+window.app = app;
 
 // Export the instance.
 export default app;
