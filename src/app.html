@@ -25,5 +25,45 @@
                 </form>
             </div>
         </div>
+
+        <div class="row mt-4 | product-list">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                </label>
+                            </th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Inventory</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each products}}
+                        <tr>
+                            <th scope="row">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                </label>
+                            </th>
+                            <td>
+                                <img src="//placehold.it/30x30" alt="preview">
+                                {{.name}}
+                            </td>
+                            <td>{{.type}}</td>
+                            <td>{{.price}}</td>
+                            <td>{{.inventory}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
