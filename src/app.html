@@ -2,31 +2,31 @@
 <section id="ProductListView" class="py-4">
     <div class="container">
 
-        <div class="row | title-with-buttons">
-            <h2 class="col-12 col-sm-4 col-md-3">Products</h2>
+        <div class="row pb-2 | title-with-buttons-row">
+            <h3 class="col-12 col-sm-4 col-md-3">Products</h3>
             <div class="col button-wrapper text-right">
-                <button class="btn btn-outline-secondary" on-click=@this.noop('Do some exporting!')>Export</button>
-                <button class="btn btn-outline-secondary" on-click=@this.noop('Do some importing!')>Import</button>
-                <button class="btn btn-primary" on-click=@this.noop('Add that product!')>Add Product</button>
+                <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some exporting!')>Export</button>
+                <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some importing!')>Import</button>
+                <button class="btn btn-primary ml-3" on-click=@this.noop('Add that product!')>Add Product</button>
             </div>
         </div>
 
-        <div class="row mt-4">
+        <div class="row mt-4 | search-row">
             <div class="col col-sm-6 col-md-4 col-xl-3">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group mb-0">
                         <div class="input-group">
-                            <label class="input-group-addon" id="basic-addon1" for="PVLSearchInput">
+                            <label class="input-group-addon bg-white pr-0 pl-3" id="basic-addon1" for="PVLSearchInput">
                                 <i class="material-icons">search</i>
                             </label>
-                            <input id="PVLSearchInput" type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+                            <input id="PVLSearchInput" type="text" class="form-control border-left-0" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
                         </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="row mt-4 | product-list">
+        <div class="row mt-1 | product-list">
             <div class="col">
                 <table class="table">
                     <thead>
@@ -39,23 +39,23 @@
                             </th>
                             <th scope="col">
                                 Name
-                                <i class="material-icons">arrow_drop_down</i>
+                                <i class="material-icons text-muted">arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Type
-                                <i class="material-icons">arrow_drop_down</i>
+                                <i class="material-icons text-muted">arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Price
-                                <i class="material-icons">arrow_drop_down</i>
+                                <i class="material-icons text-muted">arrow_drop_down</i>
                             </th>
                             <th scope="col">
                                 Inventory
-                                <i class="material-icons">arrow_drop_down</i>
+                                <i class="material-icons text-muted">arrow_drop_down</i>
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-muted">
                         {{#each products}}
                         <tr>
                             <th scope="row">
@@ -65,8 +65,8 @@
                                 </label>
                             </th>
                             <td>
-                                <img src="//placehold.it/30x30" alt="preview">
-                                {{.name}}
+                                <img src="//placehold.it/30x30" alt="preview" class="rounded">
+                                <span class="d-inline-block pl-2">{{.name}}</span>
                             </td>
                             <td>{{.type}}</td>
                             <td>{{.price}}</td>
@@ -80,8 +80,8 @@
 
         <div class="row | table-controls">
             <div class="col-6">
-                <span class="d-inline-lock mr-3">Items per page: </span>
-                <select class="custom-select">
+                <span class="d-inline-lock mr-3 text-muted">Items per page: </span>
+                <select class="custom-select custom-select-sm">
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
@@ -91,7 +91,7 @@
                 <button class="btn btn-sm btn-outline-secondary pb-0" disabled>
                     <i class="material-icons">chevron_left</i>
                 </button>
-                <select class="custom-select">
+                <select class="custom-select custom-select-sm">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

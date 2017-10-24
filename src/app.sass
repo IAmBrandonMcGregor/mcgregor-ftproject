@@ -1,10 +1,32 @@
 
+@import ./bootstrap.theme
+@import ../node_modules/bootstrap/scss/bootstrap
+@import ./bootstrap.overrides
+
 #BrandonsFTProject
-    font-family: 'Lato', sans-serif
+    padding-top: 5px
 
     .product-list
         .table
             th:first-child
                 width: 0
+                + th, + td
+                    padding-left: 0
+
             .custom-checkbox
                 margin-bottom: 0
+
+            .material-icons
+                transform: translate3d(0px, 4px, 0px)
+                font-size: $font-size-lg
+
+            .custom-checkbox
+                transform: translate3d(0px, 5px, 0px)
+
+    .table-controls
+        .material-icons
+            font-size: $font-size-lg
+            padding-bottom: 6px
+            padding-top: 1px
+        .custom-select
+            border-color: $secondary
