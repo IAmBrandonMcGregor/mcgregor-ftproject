@@ -4,6 +4,7 @@ import Ractive from 'ractive';
 import template from './app.html';
 import sass from './app.sass';
 import filter from 'lodash.filter';
+import sortBy from 'lodash.sortby';
 
 // Caching references to global data.
 const users = window.users;
@@ -21,6 +22,8 @@ const app = Ractive({
         return {
             itemsPerPage: 10,
             searchText: '',
+            sortColumn: 'name',
+            sortDesc: false,
             products: [
                 {
                     name: 'Snapback Hat',
@@ -161,8 +164,11 @@ const app = Ractive({
         visibleProducts: function () {
             const itemsPerPage = this.get('itemsPerPage');
             const searchText = this.get('searchText').toLowerCase();
+            const sortColumn = this.get('sortColumn');
+            const sortDesc = this.get('sortDesc');
             let products = this.get('products');
 
+            // Reduce our products by search text if present.
             if (searchText) {
                 let name, price;
                 products = filter(products, product => {
@@ -172,6 +178,17 @@ const app = Ractive({
                 });
             }
 
+            // Sort by selected column.
+            if (sortColumn) {
+                products = sortBy(products, sortColumn);
+
+                if (sortDesc)
+                    products.reverse();
+            }
+
+            // TODO: Improve pagination handling here.
+
+            // Grab only the current page of 
             return products.slice(0, itemsPerPage);
         },
     },
@@ -179,6 +196,10 @@ const app = Ractive({
     // Custom component-level functions.
     noop: function (message = 'IDK what though.') {
         window.console.log(`You've clicked something! ${message}`);
+    },
+    sortBy: function (sortColumn = 'name') {
+        const sortDesc = this.get('sortColumn') === sortColumn && this.get('sortDesc') === false;
+        this.set({sortColumn, sortDesc});
     },
 });
 
