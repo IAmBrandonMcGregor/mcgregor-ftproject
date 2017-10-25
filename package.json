@@ -4,7 +4,8 @@
   "description": "I'm completing the trial project from http://frontend-trial-project.weebly.com/",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p --env production"
   },
   "author": "Brandon McGregor",
   "license": "ISC",
