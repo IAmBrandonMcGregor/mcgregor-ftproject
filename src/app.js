@@ -3,25 +3,14 @@
 import Ractive from 'ractive';
 import BackboneAdaptor from 'ractive-adaptors-backbone';
 import Exoskeleton from 'exoskeleton';
+import _ from 'lodash';
 import template from './app.html';
 import sass from './app.sass';
-import filter from 'lodash.filter';
-import clone from 'lodash.clone';
-import isEmpty from 'lodash.isempty';
 import productRow from './product-row.html';
 import { ProductCollection, ProductModel } from './product.model';
-import _ from 'lodash';
 
 // Configure our BB Adaptor
 BackboneAdaptor.Backbone = Exoskeleton;
-
-// Caching references to global data.
-const users = window.users;
-const rawPosts = window.posts;
-const images = window.images;
-
-// Cache module-level variables.
-const maximumCharacters = 140;
 
 // Create our global Ractive application instance.
 const app = Ractive({
@@ -140,7 +129,7 @@ const app = Ractive({
     },
 
     editProduct: function (product) {
-        this.set(`editing.${product.id}`, new ProductModel(clone(product)));
+        this.set(`editing.${product.id}`, new ProductModel(_.clone(product)));
     },
     saveEditedProduct: function (product, checkbox) {
 
