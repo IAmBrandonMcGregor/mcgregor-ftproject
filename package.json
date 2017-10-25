@@ -17,6 +17,7 @@
     "css-loader": "0.28.7",
     "exoskeleton": "0.7.0",
     "extract-text-webpack-plugin": "3.0.1",
+    "jquery": "3.2.1",
     "lodash.clone": "4.5.0",
     "lodash.filter": "4.6.0",
     "lodash.isempty": "4.4.0",

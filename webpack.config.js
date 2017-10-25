@@ -15,7 +15,7 @@ module.exports = {
   resolve: {
     alias: {
         null: path.resolve(__dirname, 'src', 'null.js'),
-        jquery: 'null',
+        //jquery: 'jquery/dist/jquery.slim.min.js',
         underscore: 'null',
         backbone: 'exoskeleton/exoskeleton.js',
     },
