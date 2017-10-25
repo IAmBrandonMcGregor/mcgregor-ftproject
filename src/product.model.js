@@ -1,7 +1,9 @@
 import Backbone from 'backbone';
 
+const apiURL = 'https://private-anon-c447f6f7d4-weeblyfrontendtrialapi.apiary-mock.com/products';
+
 const ProductModel = Backbone.Model.extend({
-    urlRoot: 'https://private-anon-c447f6f7d4-weeblyfrontendtrialapi.apiary-mock.com/products',
+    urlRoot: apiURL,
     defaults: function () {
         return {
             name: '',
@@ -27,7 +29,7 @@ const ProductModel = Backbone.Model.extend({
 
 const ProductCollection = Backbone.Collection.extend({
     model: ProductModel,
-    url: 'https://private-anon-c447f6f7d4-weeblyfrontendtrialapi.apiary-mock.com/products',
+    url: apiURL,
 });
 
 export { ProductModel, ProductCollection };

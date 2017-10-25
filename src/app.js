@@ -136,8 +136,6 @@ const app = Ractive({
     },
     saveEditedProduct: function (product, checkbox) {
 
-        const self = this;
-
         // Grab our Backbone Model if we've received a keypath.
         if (typeof product === 'string') {
             product = this.get(product);
@@ -149,14 +147,14 @@ const app = Ractive({
             return this.set(`editing.${product.id}`, null);
         }
 
-        // If the model is valid, save it.
+        // If the model is valid, save it...
         if (product.isValid()) {
             product.save()
             .then(() => {
                 window.console.info(`We've successfully saved the product changes`);
             })
 
-            // TODO: this call is failing due to backbone using OPTIONS as the method for CORS.s
+            // TODO: this call is failing due to backbone using OPTIONS as the method for CORS.
             .catch(err => {
                 window.console.info(`There was an issue : ${err}`, err);
                 //this.set(`editing.${product.id}`, product);
@@ -166,6 +164,8 @@ const app = Ractive({
                 this.get('products').add(product);
             });
         }
+
+        // ...otherwise, don't allow it to be saved.
         else {
             console.log('This model is not valid!');
             if (checkbox) {
