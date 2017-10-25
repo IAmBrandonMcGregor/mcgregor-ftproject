@@ -7,7 +7,7 @@
             <div class="col button-wrapper text-right">
                 <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some exporting!')>Export</button>
                 <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some importing!')>Import</button>
-                <button class="btn btn-primary ml-3" on-click=@this.noop('Add that product!')>Add Product</button>
+                <button class="btn btn-primary ml-3" on-click="@this.get('newProducts').add({})">Add Product</button>
             </div>
         </div>
 
@@ -57,7 +57,16 @@
                     </thead>
                     <tbody class="text-muted">
                         {{#each visibleProducts}}
-                        {{>productRow}}
+                            {{#if editing[.id]}}
+                                {{#editing[.id]}}
+                                    {{>productRowEdit}}
+                                {{/editing[.id]}}
+                            {{else}}
+                                {{>productRow}}
+                            {{/if}}
+                        {{/each}}
+                        {{#each newProducts}}
+                            {{>productRowEdit}}
                         {{/each}}
                     </tbody>
                 </table>

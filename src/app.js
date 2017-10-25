@@ -7,6 +7,7 @@ import _ from 'lodash';
 import template from './app.html';
 import sass from './app.sass';
 import productRow from './product-row.html';
+import productRowEdit from './product-row-edit.html';
 import { ProductCollection, ProductModel } from './product.model';
 
 // Configure our BB Adaptor
@@ -19,6 +20,7 @@ const app = Ractive({
     adapt: [BackboneAdaptor],
     partials: {
         productRow,
+        productRowEdit,
     },
     data: function () {
         return {
@@ -30,6 +32,7 @@ const app = Ractive({
             editingAll: false,
             products: new ProductCollection(),
             editing: {},
+            newProducts: new ProductCollection(),
         }
     },
     computed: {
@@ -81,10 +84,11 @@ const app = Ractive({
             const pageIdx = this.get('pageIdx');
             const itemsPerPage = this.get('itemsPerPage');
             const products = this.get('sortedAndFilteredProducts');
+            const newProducts = this.get('newProducts');
             const startIdx = pageIdx * itemsPerPage;
 
             // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
-            return new ProductCollection(products.slice(startIdx, startIdx + itemsPerPage)).toJSON();
+            return new ProductCollection(products.slice(startIdx, startIdx + itemsPerPage - newProducts.length)).toJSON();
         },
     },
 
@@ -106,7 +110,9 @@ const app = Ractive({
             }
             else { // Save all of the edited products.
                 _.forEach(editing, editedProduct => {
-                    if (!_.isEmpty(editedProduct.changed))
+                    if (editedProduct === null)
+                        return;
+                    else if (!_.isEmpty(editedProduct.changed))
                         this.saveEditedProduct(editedProduct);
                     else
                         delete editing[editedProduct.id];
@@ -138,14 +144,16 @@ const app = Ractive({
             product = this.get(product);
         }
 
-        // Ignore if nothing has changed.
-        if (_.isEmpty(product.changed)) {
-            console.log('Yo dog!, nothing has changed!');
-            return this.set(`editing.${product.id}`, null);
-        }
-
         // If the model is valid, save it...
         if (product.isValid()) {
+            
+            // Ignore if nothing has changed.
+            if (_.isEmpty(product.changed)) {
+                console.log('Yo dog!, nothing has changed!');
+                return this.set(`editing.${product.id}`, null);
+            }
+
+            // Make the HTTP request to save.
             product.save()
             .then(() => {
                 window.console.info(`We've successfully saved the product changes`);
@@ -158,6 +166,7 @@ const app = Ractive({
             })
             .then(() => {
                 this.get('products').remove(product.id);
+                this.get('newProducts').remove(product.id);
                 this.get('products').add(product);
             });
         }
