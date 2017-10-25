@@ -12,7 +12,14 @@ module.exports = {
   entry: {
     app: './src/app.js',
   },
-  devtool: 'inline-source-map',
+  resolve: {
+    alias: {
+        null: path.resolve(__dirname, 'src', 'null.js'),
+        jquery: 'null',
+        underscore: 'null',
+        backbone: 'exoskeleton/exoskeleton.js',
+    },
+  },
   devServer: {
     contentBase: './'
   },

@@ -1,6 +1,8 @@
 
 // Import external dependencies.
 import Ractive from 'ractive';
+import BackboneAdaptor from 'ractive-adaptors-backbone';
+import Exoskeleton from 'exoskeleton';
 import template from './app.html';
 import sass from './app.sass';
 import filter from 'lodash.filter';
@@ -8,6 +10,10 @@ import sortBy from 'lodash.sortby';
 import clone from 'lodash.clone';
 import isEmpty from 'lodash.isempty';
 import productRow from './product-row.html';
+import { ProductCollection } from './product.model';
+
+// Configure our BB Adaptor
+BackboneAdaptor.Backbone = Exoskeleton;
 
 // Caching references to global data.
 const users = window.users;
@@ -21,6 +27,7 @@ const maximumCharacters = 140;
 const app = Ractive({
     target: '#BrandonsFTProject',
     template,
+    adapt: [BackboneAdaptor],
     partials: {
         productRow,
     },
@@ -32,7 +39,7 @@ const app = Ractive({
             sortColumn: 'name',
             sortDesc: false,
             editingAll: false,
-            products: [
+            products: new ProductCollection([
                 {
                   "id": 1,
                   "name": "Snapback Hat",
@@ -129,7 +136,7 @@ const app = Ractive({
                   "inventory": 4,
                   "thumbnail": "http://frontend-trial-project.weebly.com/uploads/1/0/5/4/105462933/11708126.png"
                 }
-            ],
+            ]),
             editing: {},
         }
     },
