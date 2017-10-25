@@ -106,14 +106,22 @@ const app = Ractive({
 
         // Setup a listener on the editing-all checkbox.
         this.observe('editingAll', function (editingAll) {
-            const editing = {};
-            if (editingAll) {
-                this.get('products').forEach(product => {
-                    editing[product.id] = product.clone();
+            const editing = this.get('editing');
+            const products = this.get('products');
+
+            if (editingAll) { // Set all products to being edited.
+                products.forEach(product => {
+                    if (!editing[product.id])
+                        editing[product.id] = product.clone();
                 });
             }
-            else if (!editingAll && !isEmpty(this.get('editing'))) {
-                console.log('TODO: Save Editing Changes!');
+            else { // Save all of the edited products.
+                _.forEach(editing, editedProduct => {
+                    if (!_.isEmpty(editedProduct.changed))
+                        this.saveEditedProduct(editedProduct);
+                    else
+                        delete editing[editedProduct.id];
+                });
             }
             this.set({editing});
         });
