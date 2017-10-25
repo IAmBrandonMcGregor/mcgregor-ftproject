@@ -10,7 +10,8 @@ import sortBy from 'lodash.sortby';
 import clone from 'lodash.clone';
 import isEmpty from 'lodash.isempty';
 import productRow from './product-row.html';
-import { ProductCollection } from './product.model';
+import { ProductCollection, ProductModel } from './product.model';
+import _ from 'lodash';
 
 // Configure our BB Adaptor
 BackboneAdaptor.Backbone = Exoskeleton;
@@ -152,12 +153,14 @@ const app = Ractive({
             // Reduce our products by search text if present.
             if (searchText) {
                 let name, price;
-                products = filter(products, product => {
-                    name = product.name.toLowerCase();
-                    price = product.price.toString();
+                products = products.filter(product => {
+                    name = product.get('name').toLowerCase();
+                    price = product.get('price').toString();
                     return name.includes(searchText) || price.includes(searchText);
                 });
             }
+            else
+                products = products.models;
 
             // Sort by selected column.
             if (sortColumn) {
@@ -188,7 +191,9 @@ const app = Ractive({
             const itemsPerPage = this.get('itemsPerPage');
             const products = this.get('sortedAndFilteredProducts');
             const startIdx = pageIdx * itemsPerPage;
-            return products.slice(startIdx, startIdx + itemsPerPage);
+
+            // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
+            return new ProductCollection(products.slice(startIdx, startIdx + itemsPerPage)).toJSON();
         },
     },
 
@@ -196,7 +201,9 @@ const app = Ractive({
         this.observe('editingAll', function (editingAll) {
             const editing = {};
             if (editingAll) {
-                this.get('products').forEach(product => editing[product.id] = clone(product));
+                this.get('products').forEach(product => {
+                    editing[product.id] = product.clone();
+                });
             }
             else if (!editingAll && !isEmpty(this.get('editing'))) {
                 console.log('TODO: Save Editing Changes!');
@@ -218,11 +225,43 @@ const app = Ractive({
     },
 
     editProduct: function (product) {
-        this.set(`editing.${product.id}`, clone(product));
+        this.set(`editing.${product.id}`, new ProductModel(clone(product)));
     },
-    saveEditedProduct: function (product) {
-        window.console.info('Yeah, go ahead and save those changes.');
-        this.set(`editing.${product.id}`, null);
+    saveEditedProduct: function (product, checkbox) {
+
+        // Grab our Backbone Model if we've received a keypath.
+        if (typeof product === 'string') {
+            product = this.get(product);
+        }
+
+        // Ignore if nothing has changed.
+        if (_.isEmpty(product.changed)) {
+            console.log('Yo dog!, nothing has changed!');
+            return this.set(`editing.${product.id}`, null);
+        }
+
+        // If the model is valid, save it.
+        if (product.isValid()) {
+            product.save()
+            .then(() => {
+                window.console.info(`We've successfully saved the product changes`);
+            })
+            .catch(err => {
+                window.console.info(`There was an issue : ${err}`, err);
+                this.set(`editing.${product.id}`, product);
+            });
+        }
+        else {
+            console.log('This model is not valid!');
+            if (checkbox) {
+                window.requestAnimationFrame(function () {
+                    checkbox.checked = true;
+                });
+            }
+            return false;
+        }
+
+        return this.set(`editing.${product.id}`, null);
     },
 });
 

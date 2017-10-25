@@ -3,7 +3,7 @@
 <tr>
     <th scope="row">
         <label class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" on-change=@this.saveEditedProduct(this) checked>
+            <input type="checkbox" class="custom-control-input" on-change=@this.saveEditedProduct(@keypath, @node) checked>
             <span class="custom-control-indicator"></span>
         </label>
     </th>
