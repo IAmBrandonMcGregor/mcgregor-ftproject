@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 
 const ProductModel = Backbone.Model.extend({
-    urlRoot: '/apiary/some-url',
+    urlRoot: 'https://private-anon-c447f6f7d4-weeblyfrontendtrialapi.apiary-mock.com/products',
     defaults: function () {
         return {
             name: '',
@@ -15,9 +15,9 @@ const ProductModel = Backbone.Model.extend({
         const errors = [];
         if (!attributes.name || !attributes.name.trim())
             errors.push('ProductModel.name is missing.');
-        if (typeof attributes.quantity !== 'number' || attributes.quantity % 1 === 0)
+        if (typeof attributes.inventory !== 'number' || attributes.inventory % 1 !== 0)
             errors.push('ProductModel.name must be an integer.');
-        if (!typeof attributes.price !== 'number')
+        if (typeof attributes.price !== 'number')
             errors.push('ProductModel.price must be a number.');
 
         if (errors.length)
@@ -27,6 +27,7 @@ const ProductModel = Backbone.Model.extend({
 
 const ProductCollection = Backbone.Collection.extend({
     model: ProductModel,
+    url: 'https://private-anon-c447f6f7d4-weeblyfrontendtrialapi.apiary-mock.com/products',
 });
 
 export { ProductModel, ProductCollection };
