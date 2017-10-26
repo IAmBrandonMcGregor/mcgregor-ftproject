@@ -85,22 +85,35 @@ const app = Ractive({
             return products;
         },
 
+        // products displayed per page - This is a number. It considers the items-per-page UI
+        //                               selector and how many new products we can show on screen.
+        productsDisplayedPerPage: function () {
+
+            // Cache references to our watched properties.
+            const itemsPerPage = parseInt(this.get('itemsPerPage'));
+            const newProducts = this.get('newProducts');
+
+            // Determine how many existing products we can show per page.
+            let productsPerPage = itemsPerPage - newProducts.length;
+            if (productsPerPage < 1) {
+                while (newProducts.length >= itemsPerPage) {
+                    newProducts.pop();
+                }
+                productsPerPage = 1;
+            }
+            return productsPerPage;
+        },
+
         // pages - This populates the page selector dropdown. It's just an array of integers. It 
         //         regenerates based on how many sorted-and-filtered and new products we have. Items per page too.
         pages: function () {
 
             // Cache references to our watched properties.
             const sortedAndFilteredProductsLength = this.get('sortedAndFilteredProducts.length');
-            const newProductsLength = this.get('newProducts.length');
-            let itemsPerPage = parseInt(this.get('itemsPerPage'));
-
-            // Factor in the number of new products we have to keep on screen.
-            itemsPerPage = itemsPerPage - newProductsLength;
-            if (itemsPerPage < 0)
-                itemsPerPage = 0;
+            const productsDisplayedPerPage = this.get('productsDisplayedPerPage');
 
             // Determine how many pages we'll need and create an array of that length.
-            const numberOfPages = Math.ceil(sortedAndFilteredProductsLength / itemsPerPage);
+            const numberOfPages = Math.ceil(sortedAndFilteredProductsLength / productsDisplayedPerPage);
             let pages = [];
             for (let i=0; i<numberOfPages; i++) {
                 pages[i] = i+1;
@@ -115,17 +128,11 @@ const app = Ractive({
             // Cache references to our watched properties.
             const pageIdx = this.get('pageIdx');
             const products = this.get('sortedAndFilteredProducts');
-            const newProductsLength = this.get('newProducts.length');
-            let itemsPerPage = this.get('itemsPerPage');
-            
-            // Factor in the number of new products we have to keep on screen.
-            itemsPerPage = itemsPerPage - newProductsLength;
-            if (itemsPerPage < 0)
-                itemsPerPage = 0;
+            const productsDisplayedPerPage = this.get('productsDisplayedPerPage');
 
             // Compute the start and end indexes.
-            const startIdx = pageIdx * itemsPerPage;
-            const endIdx = startIdx + itemsPerPage;
+            const startIdx = pageIdx * productsDisplayedPerPage;
+            const endIdx = startIdx + productsDisplayedPerPage;
 
             // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
             // We still want to use the Collection.toJSON method though because our 'products' are Backbone Models.
