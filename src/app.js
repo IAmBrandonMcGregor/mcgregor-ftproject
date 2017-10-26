@@ -243,6 +243,17 @@ const app = Ractive({
         return true;
     },
 
+    revertEditedProduct: function (keypath) {
+        if (keypath.includes('newProducts')) {
+            const index = parseInt(keypath.split('.')[1]);
+            const newProducts = this.get('newProducts');
+            const newProduct = newProducts.at(index);
+            newProducts.remove(newProduct);
+        }
+        else if (keypath.includes('editing'))
+            this.set(keypath, null);
+    },
+
     // This function is fired by the 'Add Product' button in the template.
     addNewProduct: function () {
         
@@ -255,6 +266,8 @@ const app = Ractive({
             newProducts.add({});
     },
 });
+
+window.app = app;
 
 // Export the instance.
 export default app;

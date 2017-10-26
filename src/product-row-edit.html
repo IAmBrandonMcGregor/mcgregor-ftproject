@@ -29,4 +29,7 @@
     <td>
         <input type="number" step="1" class="form-control form-control-sm text-right" value={{.inventory}} required>
     </td>
+    <td>
+        <i class="material-icons" role="button" on-click=@this.revertEditedProduct(@keypath)>delete</i>
+    </td>
 </tr>
