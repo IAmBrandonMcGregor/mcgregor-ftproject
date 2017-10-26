@@ -92,10 +92,15 @@ const app = Ractive({
             // Cache references to our watched properties.
             const sortedAndFilteredProductsLength = this.get('sortedAndFilteredProducts.length');
             const newProductsLength = this.get('newProducts.length');
-            const itemsPerPage = parseInt(this.get('itemsPerPage'));
+            let itemsPerPage = parseInt(this.get('itemsPerPage'));
+
+            // Factor in the number of new products we have to keep on screen.
+            itemsPerPage = itemsPerPage - newProductsLength;
+            if (itemsPerPage < 0)
+                itemsPerPage = 0;
 
             // Determine how many pages we'll need and create an array of that length.
-            const numberOfPages = Math.ceil((sortedAndFilteredProductsLength + newProductsLength) / itemsPerPage);
+            const numberOfPages = Math.ceil(sortedAndFilteredProductsLength / itemsPerPage);
             let pages = [];
             for (let i=0; i<numberOfPages; i++) {
                 pages[i] = i+1;
@@ -109,19 +114,22 @@ const app = Ractive({
 
             // Cache references to our watched properties.
             const pageIdx = this.get('pageIdx');
-            const itemsPerPage = this.get('itemsPerPage');
             const products = this.get('sortedAndFilteredProducts');
-            const newProducts = this.get('newProducts');
+            const newProductsLength = this.get('newProducts.length');
+            let itemsPerPage = this.get('itemsPerPage');
+            
+            // Factor in the number of new products we have to keep on screen.
+            itemsPerPage = itemsPerPage - newProductsLength;
+            if (itemsPerPage < 0)
+                itemsPerPage = 0;
 
             // Compute the start and end indexes.
-            let startIdx = (pageIdx * itemsPerPage) - newProducts.length;
-            if (startIdx < 0)
-                startIdx = 0;
-            const endIndex = startIdx + itemsPerPage - newProducts.length;
+            const startIdx = pageIdx * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
 
             // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
             // We still want to use the Collection.toJSON method though because our 'products' are Backbone Models.
-            return new ProductCollection( products.slice(startIdx, endIndex) ).toJSON();
+            return new ProductCollection( products.slice(startIdx, endIdx) ).toJSON();
         },
     },
 
@@ -220,6 +228,16 @@ const app = Ractive({
 
         this.set(`editing.${product.id}`, null);
         return true;
+    },
+    addNewProduct: function () {
+        
+        // Cache some references to view-data.
+        const newProducts = this.get('newProducts');
+        const itemsPerPage = this.get('itemsPerPage');
+
+        // Only allow new products to be added if they fit in the table.
+        if (newProducts.length < itemsPerPage-1)
+            newProducts.add({});
     },
 });
 
