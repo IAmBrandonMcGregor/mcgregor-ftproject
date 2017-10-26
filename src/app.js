@@ -24,21 +24,38 @@ const app = Ractive({
     },
     data: function () {
         return {
+
+            // UI controls - These are all modified directly by the user. Our computed properties respond.
             itemsPerPage: 10,
             pageIdx: 0,
             searchText: '',
             sortColumn: 'name',
             sortDesc: false,
             editingAll: false,
+
+            // products - This stores ALL products from the server. The UI does not bind directly to
+            //            this property. Instead it triggers computed-properties.
             products: new ProductCollection(),
+
+            // editing - This is a map of draft Product Models by id. When a user edits a product,
+            //           they're actually creating a cloned Product Model instance.
             editing: {},
+
+            // new products - This is a collection of new models without IDs. This will render
+            //                editing rows at the bottom and impacts table-page generation.
             newProducts: new ProductCollection(),
         }
     },
     computed: {
+
+        // These properties are generated whenever any of the 'this.get(...)' properties change.
+        // Ractive Computed Properties - https://ractive.js.org/api/#computed
+
+        // sorted and filtered products - a vanilla array of Product Model instances. It's been 
+        //                                sorted and filtered based on sort column, sort direction, and search text.
         sortedAndFilteredProducts: function () {
 
-            // Sort and filter our products based on UI selections.
+            // Cache references to our watched properties.
             const searchText = this.get('searchText').toLowerCase();
             const sortColumn = this.get('sortColumn');
             const sortDesc = this.get('sortDesc');
@@ -57,40 +74,54 @@ const app = Ractive({
                 products = products.models;
 
             // Sort by selected column.
+            // TODO: Sort based on the BackboneCollection.comparator and .sort() calls.
             if (sortColumn) {
                 products = _.sortBy(products, product => product.attributes[sortColumn]);
 
                 if (sortDesc)
-                    products.reverse();
+                    products.reverse(); // <- This is why we're utilizing a vanillajs array.
             }
 
             return products;
         },
+
+        // pages - This populates the page selector dropdown. It's just an array of integers. It 
+        //         regenerates based on how many sorted-and-filtered and new products we have. Items per page too.
         pages: function () {
 
-            // Populate an array of integers. This is used to populate the page selection dropdown.
-            const sortedAndFilteredProducts = this.get('sortedAndFilteredProducts');
+            // Cache references to our watched properties.
+            const sortedAndFilteredProductsLength = this.get('sortedAndFilteredProducts.length');
+            const newProductsLength = this.get('newProducts.length');
             const itemsPerPage = parseInt(this.get('itemsPerPage'));
-            const numberOfPages = Math.ceil(sortedAndFilteredProducts.length / itemsPerPage);
+
+            // Determine how many pages we'll need and create an array of that length.
+            const numberOfPages = Math.ceil((sortedAndFilteredProductsLength + newProductsLength) / itemsPerPage);
             let pages = [];
             for (let i=0; i<numberOfPages; i++) {
                 pages[i] = i+1;
             }
             return pages;
         },
+
+        // visible products - This is a vanilla array of Product Models. Only those that are present
+        //                    in the UI based on sorting, filtering, and paging.
         visibleProducts: function () {
 
-            // Based on the selected page, page length, and filter... grab the currently displayed products.
+            // Cache references to our watched properties.
             const pageIdx = this.get('pageIdx');
             const itemsPerPage = this.get('itemsPerPage');
             const products = this.get('sortedAndFilteredProducts');
             const newProducts = this.get('newProducts');
+
+            // Compute the start and end indexes.
             let startIdx = (pageIdx * itemsPerPage) - newProducts.length;
             if (startIdx < 0)
                 startIdx = 0;
+            const endIndex = startIdx + itemsPerPage - newProducts.length;
 
             // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
-            return new ProductCollection(products.slice(startIdx, startIdx + itemsPerPage - newProducts.length)).toJSON();
+            // We still want to use the Collection.toJSON method though because our 'products' are Backbone Models.
+            return new ProductCollection( products.slice(startIdx, endIndex) ).toJSON();
         },
     },
 
@@ -104,13 +135,16 @@ const app = Ractive({
             const editing = this.get('editing');
             const products = this.get('products');
 
-            if (editingAll) { // Set all products to being edited.
+            // Set all products to being edited.
+            if (editingAll) { 
                 products.forEach(product => {
                     if (!editing[product.id])
                         editing[product.id] = product.clone();
                 });
             }
-            else { // Save all of the edited products.
+
+            // Save all of the edited products.
+            else { 
                 _.forEach(editing, editedProduct => {
                     if (editedProduct === null)
                         return;
