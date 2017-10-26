@@ -32,6 +32,7 @@ const app = Ractive({
             sortColumn: 'name',
             sortDesc: false,
             editingAll: false,
+            isLoading: true,
 
             // products - This stores ALL products from the server. The UI does not bind directly to
             //            this property. Instead it triggers computed-properties.
@@ -143,7 +144,7 @@ const app = Ractive({
     oninit: function () {
 
         // Request product information.
-        this.get('products').fetch();
+        this.get('products').fetch().always(() => this.set('isLoading', false));
 
         // Setup a listener on the editing-all checkbox.
         this.observe('editingAll', function (editingAll) {

@@ -26,6 +26,11 @@
             </div>
         </div>
 
+        {{#if isLoading}}
+        <h1 class="text-center pt-5">loading...</h1>
+        {{elseif visibleProducts.length === 0}}
+        <h1 class="text-center pt-5">No Products Found</h1>
+        {{else}}
         <div class="row mt-1 | product-list">
             <div class="col">
                 <table class="table {{sortDesc ? 'sort-desc' : ''}}">
@@ -99,6 +104,7 @@
                 </button>
             </div>
         </div>
+        {{/if}}
 
     </div>
 </section>
