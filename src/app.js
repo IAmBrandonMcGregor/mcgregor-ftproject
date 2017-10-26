@@ -85,7 +85,9 @@ const app = Ractive({
             const itemsPerPage = this.get('itemsPerPage');
             const products = this.get('sortedAndFilteredProducts');
             const newProducts = this.get('newProducts');
-            const startIdx = pageIdx * itemsPerPage;
+            let startIdx = (pageIdx * itemsPerPage) - newProducts.length;
+            if (startIdx < 0)
+                startIdx = 0;
 
             // Unfortunately, the Backbone Adaptor does not work with computed properties. :'(
             return new ProductCollection(products.slice(startIdx, startIdx + itemsPerPage - newProducts.length)).toJSON();
