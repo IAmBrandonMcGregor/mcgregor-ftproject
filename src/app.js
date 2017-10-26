@@ -243,6 +243,7 @@ const app = Ractive({
         return true;
     },
 
+    // This function is fired by clicking the trash bit on edit rows.
     revertEditedProduct: function (keypath) {
         if (keypath.includes('newProducts')) {
             const index = parseInt(keypath.split('.')[1]);
