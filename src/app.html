@@ -41,15 +41,15 @@
                                 Name
                                 <i class="material-icons {{sortColumn !== 'name' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('name')>arrow_drop_down</i>
                             </th>
-                            <th scope="col">
+                            <th scope="col" class="type-column-header text-center">
                                 Type
                                 <i class="material-icons {{sortColumn !== 'type' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('type')>arrow_drop_down</i>
                             </th>
-                            <th scope="col">
+                            <th scope="col" class="price-column-header text-center">
                                 Price
                                 <i class="material-icons {{sortColumn !== 'price' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('price')>arrow_drop_down</i>
                             </th>
-                            <th scope="col">
+                            <th scope="col" class="inventory-column-header text-center">
                                 Inventory
                                 <i class="material-icons {{sortColumn !== 'inventory' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('inventory')>arrow_drop_down</i>
                             </th>
