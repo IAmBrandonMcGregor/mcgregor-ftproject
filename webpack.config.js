@@ -5,14 +5,19 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractSass = new ExtractTextPlugin({
     filename: '[name].css',
     allChunks: true,
-    disable: true//process.env.NODE_ENV === "development",
+    disable: process.env.NODE_ENV === "development",
 });
 
 module.exports = {
   entry: {
     app: './src/app.js',
   },
-  devtool: 'inline-source-map',
+  resolve: {
+    alias: {
+        underscore: 'lodash',
+        backbone: 'exoskeleton/exoskeleton.js',
+    },
+  },
   devServer: {
     contentBase: './'
   },

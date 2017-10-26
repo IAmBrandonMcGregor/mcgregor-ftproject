@@ -1,0 +1,65 @@
+
+@import ./bootstrap.theme
+@import ../node_modules/bootstrap/scss/bootstrap
+@import ./bootstrap.overrides
+
+#BrandonsFTProject
+    padding-top: 5px
+
+    .product-list
+        .table
+            tr
+                animation-duration: .5s
+                animation-name: ghostin
+            td
+                vertical-align: middle
+
+            th:first-child
+                width: 1px
+                + th, + td
+                    padding-left: 0
+                    padding-right: 0
+                    width: 0
+                    + th, + td
+                        padding-left: 4px
+
+            .custom-checkbox
+                margin-bottom: 0
+
+            .material-icons
+                transform: translate3d(0px, 4px, 0px)
+                font-size: $font-size-lg
+
+            .custom-checkbox
+                transform: translate3d(0px, 5px, 0px)
+
+            &.sort-desc
+                .material-icons.sort
+                    transform: rotate(180deg) translate3d(0px, -4px, 0px)
+
+            // column widths.
+            .type-column-header
+                width: 150px
+            .price-column-header
+                width: 124px
+            .inventory-column-header
+                width: 116px
+            .cancel-column-header
+                width: 38px
+
+
+    .table-controls
+        .material-icons
+            font-size: $font-size-lg
+            padding-bottom: 6px
+            padding-top: 1px
+        .custom-select
+            border-color: $secondary
+        .btn, .custom-select
+            height: 31px
+
+@keyframes ghostin
+    from
+        opacity: 0
+    to
+        opacity: 1

@@ -1,0 +1,25 @@
+
+[role="button"]
+    cursor: pointer
+
+.container-fluid
+    max-width: 1000px
+
+.table
+    border-bottom: $table-border-width solid $table-border-color
+    thead th
+        border-top: 0
+        font-weight: normal
+        border-bottom-width: $table-border-width
+        .custom-checkbox
+            transform: translate3d(0px, 2px, 0px);
+
+.custom-control-indicator
+    border: 1px solid $gray-400
+
+.custom-control-input:checked ~ .custom-control-indicator
+    border-color: $custom-control-indicator-checked-bg
+
+.custom-select
+    -moz-appearance: none
+    -webkit-appearance: none

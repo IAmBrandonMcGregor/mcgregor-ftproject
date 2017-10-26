@@ -1,0 +1,110 @@
+
+<section id="ProductListView" class="py-4">
+    <div class="container-fluid">
+
+        <div class="row pb-2 | title-with-buttons-row">
+            <h3 class="col-12 col-sm-4 col-md-3">Products</h3>
+            <div class="col button-wrapper text-right">
+                <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some exporting!')>Export</button>
+                <button class="btn btn-outline-secondary ml-3" on-click=@this.noop('Do some importing!')>Import</button>
+                <button class="btn btn-primary ml-3" on-click="@this.addNewProduct()">Add Product</button>
+            </div>
+        </div>
+
+        <div class="row mt-4 | search-row">
+            <div class="col col-sm-6 col-md-4 col-xl-3">
+                <form>
+                    <div class="form-group mb-0">
+                        <div class="input-group">
+                            <label class="input-group-addon bg-white pr-0 pl-3" id="basic-addon1" for="PVLSearchInput">
+                                <i class="material-icons">search</i>
+                            </label>
+                            <input value={{searchText}} id="PVLSearchInput" type="text" class="form-control border-left-0" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{#if isLoading}}
+        <h1 class="text-center pt-5">loading...</h1>
+        {{elseif visibleProducts.length === 0}}
+        <h1 class="text-center pt-5">No Products Found</h1>
+        {{else}}
+        <div class="row mt-1 | product-list">
+            <div class="col">
+                <table class="table {{sortDesc ? 'sort-desc' : ''}}">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" checked={{editingAll}}>
+                                    <span class="custom-control-indicator"></span>
+                                </label>
+                            </th>
+                            <th scope="col" colspan="2">
+                                Name
+                                <i class="material-icons {{sortColumn !== 'name' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('name')>arrow_drop_down</i>
+                            </th>
+                            <th scope="col" class="type-column-header text-center">
+                                Type
+                                <i class="material-icons {{sortColumn !== 'type' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('type')>arrow_drop_down</i>
+                            </th>
+                            <th scope="col" class="price-column-header text-center">
+                                Price
+                                <i class="material-icons {{sortColumn !== 'price' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('price')>arrow_drop_down</i>
+                            </th>
+                            <th scope="col" class="inventory-column-header text-center">
+                                Inventory
+                                <i class="material-icons {{sortColumn !== 'inventory' ? 'text-muted' : 'sort'}}" on-click=@this.sortBy('inventory')>arrow_drop_down</i>
+                            </th>
+                            <th scope="col" class="cancel-column-header text-center">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-muted">
+                        {{#each visibleProducts}}
+                            {{#if editing[.id]}}
+                                {{#editing[.id]}}
+                                    {{>productRowEdit}}
+                                {{/editing[.id]}}
+                            {{else}}
+                                {{>productRow}}
+                            {{/if}}
+                        {{/each}}
+                        {{#each newProducts}}
+                            {{>productRowEdit}}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row | table-controls">
+            <div class="col-6">
+                <span class="d-inline-lock mr-3 text-muted">Items per page: </span>
+                <select class="custom-select custom-select-sm" value={{itemsPerPage}}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+            <div class="col-6 text-right">
+                <button class="btn btn-sm btn-outline-secondary pb-0" {{pageIdx === 0 ? 'disabled' : ''}} on-click=@this.subtract('pageIdx')>
+                    <i class="material-icons">chevron_left</i>
+                </button>
+                <select class="custom-select custom-select-sm" value={{pageIdx}} {{pages.length <= 1 ? 'disabled' : ''}}>
+                    {{#each pages}}
+                    <option value={{@index}}>{{.}}</option>
+                    {{/each}}
+                </select>
+                <button class="btn btn-sm btn-outline-secondary pb-0" {{(pages.length <= 1 || pageIdx === pages.length-1) ? 'disabled' : ''}} on-click=@this.add('pageIdx')>
+                    <i class="material-icons">chevron_right</i>
+                </button>
+            </div>
+        </div>
+        {{/if}}
+
+    </div>
+</section>
