@@ -174,9 +174,12 @@ const app = Ractive({
     },
 
     // Custom component-level functions.
+    // - -  - -  - -  - - - -  - -  - -  - - - -  - -  - -  - - - -  - -  - -  - - - -  - -  - -  -|
     noop: function (message = 'IDK what though.') {
         window.console.log(`You've clicked something! ${message}`);
     },
+
+    // This function is fired when you click one of the sort columns.
     sortBy: function (sortColumn = 'name') {
         const oldSortColumn = this.get('sortColumn');
         let sortDesc = (oldSortColumn === sortColumn)
@@ -185,9 +188,12 @@ const app = Ractive({
         this.set({sortColumn, sortDesc});
     },
 
+    // This function creates a new draft clone of the Product Model for editing. It's fired when you check the edit box.
     editProduct: function (product) {
         this.set(`editing.${product.id}`, new ProductModel(_.clone(product)));
     },
+
+    // This function is fired when you un-check an edited Product Model.
     saveEditedProduct: function (product, checkbox) {
 
         // Grab our Backbone Model if we've received a keypath.
@@ -236,6 +242,8 @@ const app = Ractive({
         this.set(`editing.${product.id}`, null);
         return true;
     },
+
+    // This function is fired by the 'Add Product' button in the template.
     addNewProduct: function () {
         
         // Cache some references to view-data.
@@ -247,8 +255,6 @@ const app = Ractive({
             newProducts.add({});
     },
 });
-
-window.app = app;
 
 // Export the instance.
 export default app;
